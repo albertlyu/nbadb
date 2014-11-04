@@ -5,7 +5,7 @@ if __name__ == "__main__":
   localhost = "localhost"
   database = "nbadb"
   username = "postgres"
-  password = "password"
+  password = "postgres"
   
   conn = db.create_connection(localhost,database,username,password)
   cursor = conn.cursor()

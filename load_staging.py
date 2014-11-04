@@ -3,16 +3,15 @@ import sys
 import simplejson as json
 import urllib
 from datetime import datetime
-import fetch_urls as fetch
 import database_tasks as db
+import fetch_urls as fetch
 
 def load_staging_tables(conn,urls):
   cursor = conn.cursor()
   game_ids = []
   for url in urls:
     if fetch.validate_url(url):
-      urlRead = urllib.urlopen(url).read();
-      data = json.loads(urlRead)
+      data = json.loads(urllib.urlopen(url).read())
       print(url)
       for i in range(0,len(data["resultSets"])):
         schema_name = data["resource"]
@@ -36,7 +35,7 @@ if __name__ == "__main__":
   localhost = "localhost"
   database = "nbadb"
   username = "postgres"
-  password = "password"
+  password = "postgres"
   
   try:
     start_date = datetime.strptime(sys.argv[1], "%Y-%m-%d")

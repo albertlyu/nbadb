@@ -14,7 +14,14 @@ def validate_url(url):
     print("We failed to reach a server. Reason: ", e.reason)
   else:
     return True
-    
+
+def fetch_player_urls(player_ids):
+  urls = []
+  for player_id in player_ids:
+    player_url = NBA_BASE_URL + "commonplayerinfo?PlayerID=" + str(player_id) + "&SeasonType=Regular+Season&LeagueID=00"
+    urls.append(player_url)
+  return(urls)
+
 def fetch_scoreboard_urls(start_date,end_date):
   d = start_date
   delta = timedelta(days=1)
