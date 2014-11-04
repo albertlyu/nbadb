@@ -3,7 +3,7 @@
 ## Overview
 A Python project to extract, transform, and load NBA data into a PostgreSQL database.
 
-To load staging tables from scoreboards, box scores, play-by-plays, and shot charts:
+To load data from scoreboards, box scores, play-by-play logs, and shot charts into staging tables:
 ```
 python load_staging.py 2014-10-28 2014-11-01 # start_date to end_date
 ```
