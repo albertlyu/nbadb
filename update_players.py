@@ -16,7 +16,15 @@ if __name__ == "__main__":
   
   conn = db.create_connection(localhost,database,username,password)
   cursor = conn.cursor()
-
+  query = "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema LIKE 'staging_common%' OR table_schema LIKE 'staging_player%'";
+  cursor.execute(query)
+  rows = cursor.fetchall()
+  for row in rows:
+    drop_schema = "DROP SCHEMA " + row[0] + " CASCADE;"
+    print(drop_schema)
+    cursor.execute(drop_schema)
+  conn.commit()
+  
   players_url = "http://stats.nba.com/stats/commonallplayers?LeagueID=00&Season=2014-15&IsOnlyCurrentSeason=0"
   players_data = json.loads(urllib.urlopen(players_url).read())
 
