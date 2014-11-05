@@ -21,8 +21,8 @@ if __name__ == "__main__":
   players_data = json.loads(urllib.urlopen(players_url).read())
 
   for i in range(0,len(players_data["resultSets"])):
-    table_schema = "staging_" + players_data["resource"]
-    table_name = players_data["resultSets"][i]["name"]
+    table_schema = "staging_" + players_data["resource"].lower()
+    table_name = players_data["resultSets"][i]["name"].lower()
     column_names = players_data["resultSets"][i]["headers"]
     records = players_data["resultSets"][i]["rowSet"]
 
@@ -37,10 +37,10 @@ if __name__ == "__main__":
         player_ids.append(player[0])
 
   player_urls = fetch.fetch_player_urls(player_ids)
-  load.load_staging_tables(conn,player_urls)
+  load.load_staging_tables(conn,player_urls,'player_id')
 
-  #playerlog_urls = fetch.fetch_playerlog_urls(player_ids)
-  #load.load_staging_tables(conn,playerlog_urls)
+  playerlog_urls = fetch.fetch_playerlog_urls(player_ids)
+  load.load_staging_tables(conn,playerlog_urls,'player_id')
 
   conn.commit()
   cursor.close()
