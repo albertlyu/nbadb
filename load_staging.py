@@ -2,7 +2,7 @@
 import sys
 import simplejson as json
 import urllib
-from datetime import datetime
+from datetime import datetime, timedelta
 import database_tasks as db
 import fetch_urls as fetch
 import ConfigParser
@@ -40,16 +40,29 @@ if __name__ == "__main__":
   username = config.get('postgresql','username')
   password = config.get('postgresql','password')
 
+  conn = db.create_connection(localhost,database,username,password)
+  
   try:
     start_date = datetime.strptime(sys.argv[1], "%Y-%m-%d")
     end_date = datetime.strptime(sys.argv[2], "%Y-%m-%d")
+    dates = [start_date + timedelta(days=x) for x in range((end_date-start_date).days+1)]    
   except IndexError:
-    print("I need a start and end date ('YYYY-MM-DD').")
+    start_date = datetime.strptime('2014-10-28', "%Y-%m-%d") # 2014 Opening Night
+    end_date = datetime.now()-timedelta(days=1)
+    dates = [start_date + timedelta(days=x) for x in range((end_date-start_date).days+1)]
+    
+    cursor = conn.cursor()
+    query = 'SELECT DISTINCT game_date_est FROM staging_scoreboardv2.gameheader ORDER BY game_date_est'
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    for row in rows:
+      date = datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
+      if date in dates: dates.remove(date)
+    cursor.close()
+
+  scoreboard_urls = fetch.fetch_scoreboard_urls(dates)
+  if scoreboard_urls == None:
     sys.exit()
-
-  conn = db.create_connection(localhost,database,username,password)
-
-  scoreboard_urls = fetch.fetch_scoreboard_urls(start_date,end_date)
   game_ids = load_staging_tables(conn,scoreboard_urls)
 
   boxscore_urls = fetch.fetch_boxscore_urls(game_ids)

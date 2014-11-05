@@ -1,6 +1,5 @@
 #! /usr/bin/python
 import urllib
-from datetime import timedelta
 
 NBA_BASE_URL = "http://stats.nba.com/stats/"
 
@@ -22,17 +21,17 @@ def fetch_player_urls(player_ids):
     urls.append(player_url)
   return(urls)
 
-def fetch_scoreboard_urls(start_date,end_date):
-  d = start_date
-  delta = timedelta(days=1)
+def fetch_scoreboard_urls(dates):
   urls = []
-  while d <= end_date:
-    YYYY = str(d.year)
-    MM = str(d.month)
-    DD = str(d.day)
+  if dates == []:
+    print("Database looks up-to-date: No games left to fetch!")
+    return
+  for date in dates:
+    YYYY = str(date.year)
+    MM = str(date.month)
+    DD = str(date.day)
     scoreboard_url = NBA_BASE_URL + "scoreboardV2?DayOffset=0&LeagueID=00&gameDate=" + "%2F".join((MM,DD,YYYY)) 
     urls.append(scoreboard_url)
-    d += delta
   return(urls)
 
 def fetch_boxscore_urls(game_ids):
