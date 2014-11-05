@@ -3,7 +3,7 @@
 ## Overview
 A Python project to extract, transform, and load NBA data into a PostgreSQL database.
 
-# Staging Layer
+### Staging Layer
 
 nbadb starts by loading raw data from the source *as-is* and dumping them into staging tables. The source data includes data from scoreboards, box scores, play-by-play logs, and shot chart detail. There are also data on players and rosters, including player profile information.
 
@@ -24,7 +24,7 @@ To drop all staging tables (including the player tables), simply run the drop_st
 python drop_staging.py
 ```
 
-# Reporting Layer
+### Reporting Layer
 
 TBD
 
