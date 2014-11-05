@@ -1,0 +1,70 @@
+Data Model
+
+1. Get player information
+  a. Get PlayerIDs from commonallplayers
+  b. For each PlayerID, get player info from commonplayerinfo
+
+2. Get game information
+  a. Get GameIDs from scoreboardV2 given a range of dates
+  b. For each GameID, get boxscoresummary info from GameSummary result set
+
+3. Get play-by-play information
+  a. For each GameID, get playbyplayv2
+
+4. Get shot chart detail information
+  a. For each GameID, get shotchartdetail
+
+5. Get player-game information
+  a. For each GameID... get information from boxscores
+
+6. Get team-game information
+  b. For each GameID... get information from boxscores
+
+
+For each day, get GameIDs (NBA.com) and EventIDs (SI.com) from scoreboards:
+
+NBA.com scoreboards
+http://stats.nba.com/stats/scoreboardV2?DayOffset=0&LeagueID=00&gameDate=10%2F28%2F2014
+
+SI.com scoreboards
+http://www.si.com/pbp/liveupdate?json=1&sport=nba&date=2014-10-28
+
+For each game, scrape the following:
+
+NBA.com PbP
+http://stats.nba.com/stats/playbyplayv2?EndPeriod=10&EndRange=55800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+
+NBA.com Shot Chart Detail
+http://stats.nba.com/stats/shotchartdetail?Season=2014-15&SeasonType=Regular+Season&LeagueID=00&TeamID=0&PlayerID=0&GameID=0021400001&Outcome=&Location=&Month=0&SeasonSegment=&DateFrom=&DateTo=&OpponentTeamID=0&VsConference=&VsDivision=&Position=&RookieYear=&GameSegment=&Period=0&LastNGames=0&ContextFilter=&ContextMeasure=FG_PCT&display-mode=performance&zone-mode=zone
+
+SI.com PbP
+http://www.si.com/pbp/liveupdate?json=1&sport=nba&id=1459461&box=true&pbp=true&linescore=true
+
+
+Boxscores:
+
+http://stats.nba.com/stats/boxscore?GameID=0021300904&RangeType=0&StartPeriod=0&EndPeriod=0&StartRange=0&EndRange=0
+http://stats.nba.com/stats/boxscoresummaryv2?GameID=0021400001
+http://stats.nba.com/stats/boxscoretraditionalv2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscoreadvancedv2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscoremiscv2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscorescoringv2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscoreusagev2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscorefourfactorsv2?EndPeriod=10&EndRange=28800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+http://stats.nba.com/stats/boxscoreplayertrackv2?EndPeriod=10&EndRange=55800&GameID=0021400001&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0
+
+
+Miscellaneous:
+
+NBA.com List of Players
+http://stats.nba.com/stats/commonallplayers?LeagueID=00&Season=2014-15&IsOnlyCurrentSeason=0
+
+NBA.com Player Info
+http://stats.nba.com/stats/commonplayerinfo?PlayerID=201567&SeasonType=Regular+Season&LeagueID=00
+
+NBA.com Player Logs
+http://stats.nba.com/stats/playerdashptshotlog?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=201939&Season=2014-15&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+http://stats.nba.com/stats/playerdashptreboundlogs?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&PlayerID=201939&Season=2014-15&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=
+
+Video by GameID, GameEventID (non-standard)
+http://stats.nba.com/stats/videoevents?LeagueID=00&Season=2012-13&SeasonType=Regular+Season&TeamID=0&PlayerID=0&GameID=0021400001&Outcome=&Location=&Month=0&SeasonSegment=&DateFrom=&DateTo=&OpponentTeamID=0&VsConference=&VsDivision=&Position=&RookieYear=&GameSegment=&Period=0&LastNGames=0&ClutchTime=&AheadBehind=&PointDiff=&RangeType=1&StartPeriod=1&EndPeriod=10&StartRange=0&EndRange=0&ContextFilter=&ContextMeasure=FG_PCT&GameEventID=1
