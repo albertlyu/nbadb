@@ -42,6 +42,9 @@ if __name__ == "__main__":
   player_urls = fetch.fetch_player_urls(player_ids)
   load.load_staging_tables(conn,player_urls)
 
+  #playerlog_urls = fetch.fetch_playerlog_urls(player_ids)
+  #load.load_staging_tables(conn,playerlog_urls)
+
   conn.commit()
   cursor.close()
   conn.close()

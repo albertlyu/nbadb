@@ -45,7 +45,7 @@ if __name__ == "__main__":
   try:
     start_date = datetime.strptime(sys.argv[1], "%Y-%m-%d")
     end_date = datetime.strptime(sys.argv[2], "%Y-%m-%d")
-    dates = [start_date + timedelta(days=x) for x in range((end_date-start_date).days+1)]    
+    dates = [start_date + timedelta(days=x) for x in range((end_date-start_date).days+1)]
   except IndexError:
     start_date = datetime.strptime('2014-10-28', "%Y-%m-%d") # 2014 Opening Night
     end_date = datetime.now()-timedelta(days=1)
