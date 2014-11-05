@@ -15,14 +15,14 @@ def load_staging_tables(conn,urls):
       data = json.loads(urllib.urlopen(url).read())
       print(url)
       for i in range(0,len(data["resultSets"])):
-        schema_name = data["resource"]
+        table_schema = data["resource"]
         table_name = data["resultSets"][i]["name"]
         column_names = data["resultSets"][i]["headers"]
         records = data["resultSets"][i]["rowSet"]
         
-        db.create_staging_schema(cursor,schema_name)
-        db.create_staging_table(cursor,schema_name,table_name,column_names)
-        db.insert_staging_records(cursor,schema_name,table_name,column_names,records)
+        db.create_staging_schema(cursor,table_schema)
+        db.create_staging_table(cursor,table_schema,table_name,column_names)
+        db.insert_staging_records(cursor,table_schema,table_name,column_names,records)
         
         if table_name == 'GameHeader':
           for game in data["resultSets"][i]["rowSet"]:

@@ -21,14 +21,14 @@ if __name__ == "__main__":
   players_data = json.loads(urllib.urlopen(players_url).read())
 
   for i in range(0,len(players_data["resultSets"])):
-    schema_name = players_data["resource"]
+    table_schema = players_data["resource"]
     table_name = players_data["resultSets"][i]["name"]
     column_names = players_data["resultSets"][i]["headers"]
     records = players_data["resultSets"][i]["rowSet"]
 
-    db.create_staging_schema(cursor,schema_name)
-    db.create_staging_table(cursor,schema_name,table_name,column_names)
-    db.insert_staging_records(cursor,schema_name,table_name,column_names,records)
+    db.create_staging_schema(cursor,table_schema)
+    db.create_staging_table(cursor,table_schema,table_name,column_names)
+    db.insert_staging_records(cursor,table_schema,table_name,column_names,records)
   
   player_ids = []
   if players_data["resultSets"][i]["name"] == 'CommonAllPlayers':
