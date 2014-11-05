@@ -4,12 +4,15 @@ import urllib
 import database_tasks as db
 import fetch_urls as fetch
 import load_staging as load
+import ConfigParser
 
 if __name__ == "__main__":
-  localhost = "localhost"
-  database = "nbadb"
-  username = "postgres"
-  password = "postgres"
+  config = ConfigParser.ConfigParser()
+  config.read("config.ini")
+  localhost = config.get('postgresql','localhost')
+  database = config.get('postgresql','database')
+  username = config.get('postgresql','username')
+  password = config.get('postgresql','password')
   
   conn = db.create_connection(localhost,database,username,password)
   cursor = conn.cursor()

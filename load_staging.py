@@ -5,6 +5,7 @@ import urllib
 from datetime import datetime
 import database_tasks as db
 import fetch_urls as fetch
+import ConfigParser
 
 def load_staging_tables(conn,urls):
   cursor = conn.cursor()
@@ -32,11 +33,13 @@ def load_staging_tables(conn,urls):
   return(game_ids)
 
 if __name__ == "__main__":
-  localhost = "localhost"
-  database = "nbadb"
-  username = "postgres"
-  password = "postgres"
-  
+  config = ConfigParser.ConfigParser()
+  config.read("config.ini")
+  localhost = config.get('postgresql','localhost')
+  database = config.get('postgresql','database')
+  username = config.get('postgresql','username')
+  password = config.get('postgresql','password')
+
   try:
     start_date = datetime.strptime(sys.argv[1], "%Y-%m-%d")
     end_date = datetime.strptime(sys.argv[2], "%Y-%m-%d")
