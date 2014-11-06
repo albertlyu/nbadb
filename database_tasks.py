@@ -12,13 +12,13 @@ def create_schema(cursor,table_schema):
   create_schema = "CREATE SCHEMA IF NOT EXISTS " + table_schema + ";"
   #print(create_schema)
   cursor.execute(create_schema)
-  print("Created " + table_schema + " schema")
+  #print("Created " + table_schema + " schema")
 
 def create_table(cursor,table_schema,table_name,column_names):
   create_table = "CREATE TABLE IF NOT EXISTS " + table_schema + "." + table_name + " (" + " varchar(100),".join(column_names) + " varchar(100));"
   #print(create_table)
   cursor.execute(create_table.replace(",TO ",",TURNOVERS "))
-  print("Created " + table_schema + "." + table_name + " table")
+  #print("Created " + table_schema + "." + table_name + " table")
 
 def insert_records(cursor,table_schema,table_name,column_names,records):
   for record in records:
@@ -42,10 +42,10 @@ def add_column_to_staging_table(cursor,table_schema,table_name,column_name):
     add_column = "ALTER TABLE " + table_schema + "." + table_name + " ADD COLUMN " + column_name + " varchar(100);"
     #print(add_column)
     cursor.execute(add_column)
-    print("Added " + column_name + " to " + table_schema + "." + table_name)
+    #print("Added " + column_name + " to " + table_schema + "." + table_name)
 
 def update_records(cursor,table_schema,table_name,column_name,value):
   update_records = "UPDATE " + table_schema + "." + table_name + " SET " + column_name + "='" + value + "' WHERE COALESCE(" + column_name + ",'')='';"
   #print(update_records)
   cursor.execute(update_records)
-  print("Updated records in " + table_schema + "." + table_name + " where " + column_name + " is empty")
+  #print("Updated records in " + table_schema + "." + table_name + " where " + column_name + " is empty")

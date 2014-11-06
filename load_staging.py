@@ -13,7 +13,8 @@ def load_staging_tables(conn,urls,id_name):
   for url in urls:
     if fetch.validate_url(url):
       data = json.loads(urllib.urlopen(url).read())
-      print('\n' + url + '\n')
+      print('\n' + "URL: " + url + '\n')
+
       for i in range(0,len(data["resultSets"])):
         table_schema = "staging_" + data["resource"].lower()
         table_name = data["resultSets"][i]["name"].lower()
@@ -21,6 +22,7 @@ def load_staging_tables(conn,urls,id_name):
         records = data["resultSets"][i]["rowSet"]
         column_name = id_name
         id_value = str(url.split('=')[-1])
+
         if id_name == 'game_date_est':
           id_value = datetime.strptime(id_value.replace('%2F','-'), "%m-%d-%Y")
           id_value = datetime.strftime(id_value, "%Y-%m-%dT%H:%M:%S")
@@ -71,14 +73,25 @@ if __name__ == "__main__":
 
   scoreboard_urls = fetch.fetch_scoreboard_urls(dates)
   if scoreboard_urls == None:
+    print("Database looks up-to-date: No further games left to fetch!")
     sys.exit()
   game_ids = load_staging_tables(conn,scoreboard_urls,'game_date_est')
   print(game_ids)
 
-  boxscore_urls = fetch.fetch_boxscore_urls(game_ids)
-  load_staging_tables(conn,boxscore_urls,'game_id')
+  resources = []
+  boxscore_resources = ['boxscoresummaryv2','boxscoreadvancedv2','boxscoremiscv2','boxscorescoringv2','boxscoreusagev2','boxscorefourfactorsv2','boxscoreplayertrackv2']
+  boxscore_params = "?EndPeriod=0&EndRange=0&RangeType=0&Season=2014-15&SeasonType=Regular+Season&StartPeriod=0&StartRange=0&GameID="
+  playbyplay_params = "?&EndPeriod=10&EndRange=55800&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0&GameID="
+  shotchart_params = "?&Season=2014-15&SeasonType=Regular+Season&LeagueID=00&TeamID=0&PlayerID=0&Outcome=&Location=&Month=0&SeasonSegment=&DateFrom=&DateTo=&OpponentTeamID=0&VsConference=&VsDivision=&Position=&RookieYear=&GameSegment=&Period=0&LastNGames=0&ContextFilter=&ContextMeasure=FG_PCT&display-mode=performance&zone-mode=zone&GameID="
 
-  playbyplay_urls = fetch.fetch_playbyplay_urls(game_ids)
-  load_staging_tables(conn,playbyplay_urls,'game_id')
+  for boxscore_resource in boxscore_resources:
+    resources.append(zip([boxscore_resource],[boxscore_params]))
+  resources.append(zip(['playbyplayv2'],[playbyplay_params]))
+  resources.append(zip(['shotchartdetail'],[shotchart_params]))
 
+  for resource in resources:
+    print('\n' + "Loading resource: " + resource[0][0])
+    urls = fetch.fetch_urls(game_ids,resource[0][0],resource[0][1])
+    load_staging_tables(conn,urls,'game_id')
+   
   conn.close()

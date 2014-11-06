@@ -43,13 +43,18 @@ if __name__ == "__main__":
     for player in players_data["resultSets"][i]["rowSet"]:
       if player[4] == '2014':
         player_ids.append(player[0])
+  
+  resources = []
+  playerinfo_params = "?SeasonType=Regular+Season&LeagueID=00&PlayerID="
+  playerlog_params = "?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2014-15&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&PlayerID="
 
-  player_urls = fetch.fetch_player_urls(player_ids)
-  load.load_staging_tables(conn,player_urls,'player_id')
+  resources.append(zip(['commonplayerinfo'],[playerinfo_params]))
+  resources.append(zip(['playerdashptshotlog'],[playerlog_params]))
+  resources.append(zip(['playerdashptreboundlogs'],[playerlog_params]))
 
-  playerlog_urls = fetch.fetch_playerlog_urls(player_ids)
-  load.load_staging_tables(conn,playerlog_urls,'player_id')
+  for resource in resources:
+    print('\n' + "Loading resource: " + resource[0][0])
+    urls = fetch.fetch_urls(player_ids,resource[0][0],resource[0][1])
+    load.load_staging_tables(conn,urls,'player_id')
 
-  conn.commit()
-  cursor.close()
   conn.close()
