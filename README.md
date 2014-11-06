@@ -11,9 +11,11 @@ Details on Python module and package requirements will be provided later...
 
 ### Configuration
 
-Update your config.ini file with your PostgreSQL credentials. You will need to create a new database called 'nbadb,' which you can do so by using PostgreSQL's ```createdb``` wrapper statement in command line or executing a CREATE DATABASE statement in a psql interpreter.
+Update your config.ini file with your PostgreSQL credentials. You will need to create a new database called 'nbadb,' which you can do so by using PostgreSQL's ```createdb``` wrapper statement in command line or executing a ```CREATE DATABASE``` statement in a psql interpreter.
 
-### Staging Layer (Work in Progress)
+## ETL Details
+
+### Staging Layer
 
 nbadb starts by loading raw data from the source *as-is* and dumping them into staging tables. The source includes data from scoreboards, box scores, play-by-play logs, and shot chart detail. There are also data on players, including player profile information, player shot logs, and player rebound logs.
 
