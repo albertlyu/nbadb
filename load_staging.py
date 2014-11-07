@@ -78,11 +78,12 @@ if __name__ == "__main__":
   game_ids = load_staging_tables(conn,scoreboard_urls,'game_date_est')
   print(game_ids)
 
+  season = '2014-15'
   resources = []
   boxscore_resources = ['boxscoresummaryv2','boxscoreadvancedv2','boxscoremiscv2','boxscorescoringv2','boxscoreusagev2','boxscorefourfactorsv2','boxscoreplayertrackv2']
-  boxscore_params = "?EndPeriod=0&EndRange=0&RangeType=0&Season=2014-15&SeasonType=Regular+Season&StartPeriod=0&StartRange=0&GameID="
-  playbyplay_params = "?&EndPeriod=10&EndRange=55800&RangeType=2&Season=2014-15&SeasonType=Regular+Season&StartPeriod=1&StartRange=0&GameID="
-  shotchart_params = "?&Season=2014-15&SeasonType=Regular+Season&LeagueID=00&TeamID=0&PlayerID=0&Outcome=&Location=&Month=0&SeasonSegment=&DateFrom=&DateTo=&OpponentTeamID=0&VsConference=&VsDivision=&Position=&RookieYear=&GameSegment=&Period=0&LastNGames=0&ContextFilter=&ContextMeasure=FG_PCT&display-mode=performance&zone-mode=zone&GameID="
+  boxscore_params = "?Season=" + season + "&SeasonType=Regular+Season&EndPeriod=0&EndRange=0&RangeType=0&StartPeriod=0&StartRange=0&GameID="
+  playbyplay_params = "?Season=" + season + "&SeasonType=Regular+Season&EndPeriod=10&EndRange=55800&RangeType=2&StartPeriod=1&StartRange=0&GameID="
+  shotchart_params = "?Season=" + season + "&SeasonType=Regular+Season&LeagueID=00&TeamID=0&PlayerID=0&Outcome=&Location=&Month=0&SeasonSegment=&DateFrom=&DateTo=&OpponentTeamID=0&VsConference=&VsDivision=&Position=&RookieYear=&GameSegment=&Period=0&LastNGames=0&ContextFilter=&ContextMeasure=FG_PCT&display-mode=performance&zone-mode=zone&GameID="
 
   for boxscore_resource in boxscore_resources:
     resources.append(zip([boxscore_resource],[boxscore_params]))

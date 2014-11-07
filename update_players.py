@@ -1,4 +1,5 @@
 #! /usr/bin/python
+import sys
 import simplejson as json
 import urllib
 import database_tasks as db
@@ -15,6 +16,12 @@ if __name__ == "__main__":
   password = config.get('postgresql','password')
   
   conn = db.create_connection(localhost,database,username,password)
+
+  try:
+    season = sys.argv[1]
+  except IndexError:
+    season = '2014-15'
+
   cursor = conn.cursor()
   query = "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema LIKE 'staging_common%' OR table_schema LIKE 'staging_player%'";
   cursor.execute(query)
@@ -25,8 +32,9 @@ if __name__ == "__main__":
     cursor.execute(drop_schema)
   conn.commit()
   
-  players_url = "http://stats.nba.com/stats/commonallplayers?LeagueID=00&Season=2014-15&IsOnlyCurrentSeason=0"
+  players_url = "http://stats.nba.com/stats/commonallplayers?Season=" + season + "&LeagueID=00&IsOnlyCurrentSeason=0"
   players_data = json.loads(urllib.urlopen(players_url).read())
+  print('\n' + "URL: " + players_url + '\n')
 
   for i in range(0,len(players_data["resultSets"])):
     table_schema = "staging_" + players_data["resource"].lower()
@@ -41,12 +49,13 @@ if __name__ == "__main__":
   player_ids = []
   if players_data["resultSets"][i]["name"] == 'CommonAllPlayers':
     for player in players_data["resultSets"][i]["rowSet"]:
-      if player[4] == '2014':
+      if player[4] in ('2014'):
         player_ids.append(player[0])
-  
+  print('Players found: ' + str(len(player_ids)))
+
   resources = []
   playerinfo_params = "?SeasonType=Regular+Season&LeagueID=00&PlayerID="
-  playerlog_params = "?DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&Season=2014-15&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&PlayerID="
+  playerlog_params = "?Season=" + season + "&SeasonType=Regular+Season&DateFrom=&DateTo=&GameSegment=&LastNGames=0&LeagueID=00&Location=&Month=0&OpponentTeamID=0&Outcome=&Period=0&SeasonSegment=&TeamID=0&VsConference=&VsDivision=&PlayerID="
 
   resources.append(zip(['commonplayerinfo'],[playerinfo_params]))
   resources.append(zip(['playerdashptshotlog'],[playerlog_params]))
