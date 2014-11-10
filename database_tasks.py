@@ -21,10 +21,14 @@ def create_table(cursor,table_schema,table_name,column_names):
   #print("Created " + table_schema + "." + table_name + " table")
 
 def insert_records(cursor,table_schema,table_name,column_names,records):
+  insert_base = "INSERT INTO " + table_schema + "." + table_name + " (" + ",".join(column_names) + ") VALUES "
+  insert_values = []
   for record in records:
-    insert_record = "INSERT INTO " + table_schema + "." + table_name + " (" + ",".join(column_names) + ") VALUES" + " ('" + "','".join(str(x).replace("'","''") for x in record) + "');"
-    #print(insert_record)
-    cursor.execute(insert_record.replace(",TO,",",TURNOVERS,"))
+    insert_value = "('" + "','".join(str(x).replace("'","''") for x in record) + "')"  
+    insert_values.append(insert_value)
+  insert_record = insert_base + ",".join(insert_values) + ";"
+  print(insert_record)
+  cursor.execute(insert_record.replace(",TO,",",TURNOVERS,"))
   print("Inserted " + str(len(records)) + " records into " + table_schema + "." + table_name)
 
 def check_if_column_exists(cursor,table_schema,table_name,column_name):
