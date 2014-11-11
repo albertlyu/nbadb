@@ -17,15 +17,17 @@ if __name__ == "__main__":
   except IndexError:
     season = '2014-15'
 
-  # Drop all existing player schemas (not including player logs)
+  # Truncate all existing player tables (including player logs)
   cursor = conn.cursor()
-  query = "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema LIKE 'staging_common%' OR table_schema LIKE 'staging_player%'";
+  query = "SELECT DISTINCT table_schema, table_name FROM information_schema.tables WHERE table_schema LIKE 'staging_common%' OR table_schema LIKE 'staging_player%'";
   cursor.execute(query)
   rows = cursor.fetchall()
   for row in rows:
-    drop_schema = "DROP SCHEMA " + row[0] + " CASCADE;"
-    print(drop_schema)
-    cursor.execute(drop_schema)
+    table_schema = row[0]
+    table_name = row[1]
+    truncate_table = "TRUNCATE TABLE %s.%s;" % (table_schema,table_name)
+    print(truncate_table)
+    cursor.execute(truncate_table)
   conn.commit()
   
   # Load players data from season-level players URL
@@ -45,7 +47,7 @@ if __name__ == "__main__":
   player_ids = []
   if players_data["resultSets"][i]["name"] == 'CommonAllPlayers':
     for player in players_data["resultSets"][i]["rowSet"]:
-      if player[4] in ('2014'):
+      if player[4] in ('2014'): # Does not include players who retired before 2014
         player_ids.append(player[0])
   print('Players found: ' + str(len(player_ids)))
 
