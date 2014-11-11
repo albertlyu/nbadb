@@ -47,7 +47,11 @@ if __name__ == "__main__":
   player_ids = []
   if players_data["resultSets"][i]["name"] == 'CommonAllPlayers':
     for player in players_data["resultSets"][i]["rowSet"]:
-      if player[4] in ('2014'): # Does not include players who retired before 2014
+      if season == '2013-14':
+        seasons = ['2013','2014']
+      if season == '2014-15':
+        seasons = ['2014']
+      if player[4] in seasons:
         player_ids.append(player[0])
   print('Players found: ' + str(len(player_ids)))
 
