@@ -1,7 +1,14 @@
 #! /usr/bin/python
+import ConfigParser
 import psycopg2
 
-def create_connection(localhost,database,username,password):
+def create_connection():
+  config = ConfigParser.ConfigParser()
+  config.read("config.ini")
+  localhost = config.get('postgresql','localhost')
+  database = config.get('postgresql','database')
+  username = config.get('postgresql','username')
+  password = config.get('postgresql','password')
   conn_string = "host='" + localhost + "' dbname='" + database + "' user='" + username + "' password='" + password + "'"
   print("Connecting to database...")
   conn = psycopg2.connect(conn_string)
@@ -27,9 +34,13 @@ def insert_records(cursor,table_schema,table_name,column_names,records):
     insert_value = "('" + "','".join(str(x).replace("'","''") for x in record) + "')"  
     insert_values.append(insert_value)
   insert_record = insert_base + ",".join(insert_values) + ";"
-  #print(insert_record)
-  cursor.execute(insert_record.replace(",TO,",",TOV,"))
-  print("Inserted " + str(len(records)) + " records into " + table_schema + "." + table_name)
+  if records != []:
+    print(insert_record)
+    cursor.execute(insert_record.replace(",TO,",",TOV,"))
+    print("Inserted " + str(len(records)) + " records into " + table_schema + "." + table_name)
+  else:
+    print("No records to insert into %s.%s" % (table_schema,table_name))
+  
 
 def check_if_column_exists(cursor,table_schema,table_name,column_name):
   query = "SELECT * FROM information_schema.columns WHERE table_schema = '" + table_schema + "' AND table_name = '" + table_name + "' AND column_name = '" + column_name + "';"

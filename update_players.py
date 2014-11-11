@@ -5,18 +5,9 @@ import urllib
 import database_tasks as db
 import fetch_urls as fetch
 import load_staging as load
-import ConfigParser
 
 if __name__ == "__main__":
-  config = ConfigParser.ConfigParser()
-  config.read("config.ini")
-  localhost = config.get('postgresql','localhost')
-  database = config.get('postgresql','database')
-  username = config.get('postgresql','username')
-  password = config.get('postgresql','password')
-  
-  conn = db.create_connection(localhost,database,username,password)
-
+  conn = db.create_connection()
   try:
     season = sys.argv[1]
   except IndexError:
@@ -45,7 +36,7 @@ if __name__ == "__main__":
     db.create_schema(cursor,table_schema)
     db.create_table(cursor,table_schema,table_name,column_names)
     db.insert_records(cursor,table_schema,table_name,column_names,records)
-  
+    
   player_ids = []
   if players_data["resultSets"][i]["name"] == 'CommonAllPlayers':
     for player in players_data["resultSets"][i]["rowSet"]:

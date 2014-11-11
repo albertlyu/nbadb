@@ -5,7 +5,6 @@ import urllib
 from datetime import datetime, timedelta
 import database_tasks as db
 import fetch_urls as fetch
-import ConfigParser
 
 def load_staging_tables(conn,urls,id_name):
   game_ids = []
@@ -44,15 +43,7 @@ def load_staging_tables(conn,urls,id_name):
   return(game_ids)
 
 if __name__ == "__main__":
-  config = ConfigParser.ConfigParser()
-  config.read("config.ini")
-  localhost = config.get('postgresql','localhost')
-  database = config.get('postgresql','database')
-  username = config.get('postgresql','username')
-  password = config.get('postgresql','password')
-
-  conn = db.create_connection(localhost,database,username,password)
-  
+  conn = db.create_connection()
   try:
     start_date = datetime.strptime(sys.argv[1], "%Y-%m-%d")
     end_date = datetime.strptime(sys.argv[2], "%Y-%m-%d")
@@ -73,7 +64,7 @@ if __name__ == "__main__":
     except db.psycopg2.Error as e:
       print(e.pgerror)
       conn.close()
-      conn = db.create_connection(localhost,database,username,password)
+      conn = db.create_connection()
     
   scoreboard_urls = fetch.fetch_scoreboard_urls(dates)
   if scoreboard_urls == None:
