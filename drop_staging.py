@@ -2,6 +2,9 @@
 import database_tasks as db
 
 if __name__ == "__main__":
+  """
+  This script drops all staging tables in the database. Use with care.
+  """
   conn = db.create_connection()
   cursor = conn.cursor()
   query = "SELECT DISTINCT table_schema FROM information_schema.tables WHERE table_schema LIKE 'staging_%'";

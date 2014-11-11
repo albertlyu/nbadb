@@ -4,6 +4,9 @@ import urllib
 NBA_BASE_URL = "http://stats.nba.com/stats/"
 
 def validate_url(url):
+  """
+  Validate URL and return True except HTTPError or URLError.
+  """
   try:
     urllib.urlopen(url)
   except urllib.error.HTTPError as e:
@@ -16,6 +19,9 @@ def validate_url(url):
     return True
 
 def fetch_scoreboard_urls(dates):
+  """
+  Fetch scoreboard URLs by gameDate given a list of datetime objects.
+  """
   urls = []
   scoreboard_params = "scoreboardV2?DayOffset=0&LeagueID=00&gameDate="
   for date in dates:
@@ -27,6 +33,9 @@ def fetch_scoreboard_urls(dates):
   return(urls)
 
 def fetch_urls(ids,resource,params):
+  """
+  Fetch resource URLs given identifier, resource name, and parameters.
+  """
   urls = []
   for id in ids:
     url = NBA_BASE_URL + resource + params + str(id)
