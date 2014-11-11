@@ -61,16 +61,20 @@ if __name__ == "__main__":
     start_date = datetime.strptime('2014-10-28', "%Y-%m-%d") # 2014 Opening Night
     end_date = datetime.now()-timedelta(days=1)
     dates = [start_date + timedelta(days=x) for x in range((end_date-start_date).days+1)]
+    try:
+      cursor = conn.cursor()
+      query = "SELECT DISTINCT game_date_est FROM staging_scoreboardv2.gameheader ORDER BY game_date_est;"
+      cursor.execute(query)
+      rows = cursor.fetchall()
+      for row in rows:
+        date = datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
+        if date in dates: dates.remove(date)
+      cursor.close()
+    except db.psycopg2.Error as e:
+      print(e.pgerror)
+      conn.close()
+      conn = db.create_connection(localhost,database,username,password)
     
-    cursor = conn.cursor()
-    query = "SELECT DISTINCT game_date_est FROM staging_scoreboardv2.gameheader ORDER BY game_date_est;"
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    for row in rows:
-      date = datetime.strptime(row[0], "%Y-%m-%dT%H:%M:%S")
-      if date in dates: dates.remove(date)
-    cursor.close()
-
   scoreboard_urls = fetch.fetch_scoreboard_urls(dates)
   if scoreboard_urls == None:
     print("Database looks up-to-date: No further games left to fetch!")

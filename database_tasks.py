@@ -17,7 +17,7 @@ def create_schema(cursor,table_schema):
 def create_table(cursor,table_schema,table_name,column_names):
   create_table = "CREATE TABLE IF NOT EXISTS " + table_schema + "." + table_name + " (" + " varchar(100),".join(column_names) + " varchar(100));"
   #print(create_table)
-  cursor.execute(create_table.replace(",TO ",",TURNOVERS "))
+  cursor.execute(create_table.replace(",TO ",",TOV "))
   #print("Created " + table_schema + "." + table_name + " table")
 
 def insert_records(cursor,table_schema,table_name,column_names,records):
@@ -27,8 +27,8 @@ def insert_records(cursor,table_schema,table_name,column_names,records):
     insert_value = "('" + "','".join(str(x).replace("'","''") for x in record) + "')"  
     insert_values.append(insert_value)
   insert_record = insert_base + ",".join(insert_values) + ";"
-  print(insert_record)
-  cursor.execute(insert_record.replace(",TO,",",TURNOVERS,"))
+  #print(insert_record)
+  cursor.execute(insert_record.replace(",TO,",",TOV,"))
   print("Inserted " + str(len(records)) + " records into " + table_schema + "." + table_name)
 
 def check_if_column_exists(cursor,table_schema,table_name,column_name):
