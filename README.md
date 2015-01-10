@@ -5,12 +5,13 @@ A Python project to extract, transform, and load NBA data into a PostgreSQL data
 
 ### Requirements
 
-This project was built with Python 2.7.6, PostgreSQL 9.3.4. That does not mean it won't work in Python 3 or PostgreSQL 9.4, as I haven't tested that yet. It should work on both Windows and Unix operating systems. I think it's best that you create your nbadb within a virtual environment for easy replication.
+This project was built with Python 2.7.5, PostgreSQL 9.4.0. That does not mean it won't work in Python 3 or PostgreSQL 9.4, as I haven't tested that yet. It should work on both Windows and Unix operating systems. I think it's best that you create your nbadb within a virtual environment for easy replication.
 
 In your nbadb folder, start a ```virtualenv``` instance (see the [virtualenv docs](http://virtualenv.readthedocs.org/en/latest/virtualenv.html) for more information) and install the required modules:
 
 ```
 $ virtualenv ENV
+$ source ENV/bin/activate # For Unix machines
 $ \path\to\ENV\Scripts\activate # For Windows machines
 $ pip install -r requirements.txt
 ```
